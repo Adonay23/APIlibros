@@ -1,32 +1,72 @@
 package com.ues.bibliotecalibro.serviceImpl;
 
+import com.ues.bibliotecalibro.entity.Biblioteca;
+import com.ues.bibliotecalibro.responseDto.GenericResponse;
 import com.ues.bibliotecalibro.entity.Libro;
+import com.ues.bibliotecalibro.repository.BibliotecaRepository;
 import com.ues.bibliotecalibro.repository.LibroRepository;
+import com.ues.bibliotecalibro.responseDto.LibrosResponseDto;
 import com.ues.bibliotecalibro.services.ILibroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LibrosServiceImpl implements ILibroService {
     @Autowired
     LibroRepository libroRepository;
 
+    @Autowired
+    private BibliotecaRepository bibliotecaRepository;
+
     @Override
-    public Libro registrar(Libro obj) {
-        return null;
+    public ResponseEntity<GenericResponse> registrar(Libro libro) {
+        GenericResponse<Libro> rs = new GenericResponse<Libro>();
+        try {
+            Optional<Biblioteca> bibliotecaOptional = bibliotecaRepository.findById(libro.getBibliotequita().getId());
+
+            libro.setBibliotequita(bibliotecaOptional.get());
+            libroRepository.save(libro);
+            rs.setCode(1);
+            rs.setMessage("Exito -Libro Agregado");
+            return new ResponseEntity<GenericResponse>(rs, HttpStatus.CREATED);
+        } catch (Exception e) {
+            rs.setCode(0);
+            rs.setMessage("Error - No pudo agregarse el libro");
+            return new ResponseEntity<GenericResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     @Override
-    public Libro modificar(Libro obj) {
-        return null;
+    public ResponseEntity<GenericResponse> modificar(Libro libro, Integer id) {
+        GenericResponse<Libro> rs = new GenericResponse<Libro>();
+        try {
+            Optional<Biblioteca> bibliotecaOptional = bibliotecaRepository.findById(libro.getBibliotequita().getId());
+            Optional<Libro> libroOptional = libroRepository.findById(id);
+            libro.setBibliotequita(bibliotecaOptional.get());
+            libro.setId(libroOptional.get().getId());
+            libroRepository.save(libro);
+            rs.setCode(1);
+            rs.setMessage("Exito -Libro Actualizado");
+            return new ResponseEntity<GenericResponse>(rs, HttpStatus.OK);
+        } catch (Exception e) {
+            rs.setCode(0);
+            rs.setMessage("Error - No pudo modificarse el libro");
+            return new ResponseEntity<GenericResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
-    public List<Libro> listar() {
-        return null;
+    public ResponseEntity<Page<Libro>> listar(Pageable pageable) {
+        return ResponseEntity.ok(libroRepository.findAll(pageable));
     }
+
 
     @Override
     public Libro leerPorId(Integer id) {
@@ -34,22 +74,47 @@ public class LibrosServiceImpl implements ILibroService {
     }
 
     @Override
-    public boolean eliminar(Libro obj) {
-        try {
-            this.libroRepository.delete(obj);
-            return true;
-        } catch (Exception e) {
-            return false;
+    public ResponseEntity<GenericResponse> eliminar(Integer id) {
+        GenericResponse<Libro> rs = new GenericResponse<Libro>();
+        Optional<Libro> libroOptional = libroRepository.findById(id);
+        if (libroOptional != null) {
+            try {
+                this.libroRepository.delete(libroOptional.get());
+                rs.setCode(1);
+                rs.setMessage("Exito -Libro eliminado");
+                return new ResponseEntity<GenericResponse>(rs, HttpStatus.OK);
+            } catch (Exception e) {
+                rs.setCode(0);
+                rs.setMessage("Error - Ocurrio un error inesperado");
+                return new ResponseEntity<GenericResponse>(rs, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            rs.setCode(0);
+            rs.setMessage("Error - No pudo eliminarse el libro");
+            return new ResponseEntity<GenericResponse>(rs, HttpStatus.NOT_FOUND);
         }
+
+    }
+
+
+    @Override
+    public ResponseEntity<Page<LibrosResponseDto>> ListaLibros(Pageable pageable) {
+
+        Page<LibrosResponseDto> librosMostrar = null;
+        try {
+            librosMostrar = libroRepository.findAllBook(pageable);
+        } catch (Exception e) {
+            System.out.println("ERROR:" + e.getMessage());
+        }
+        return ResponseEntity.ok(librosMostrar);
     }
 
     @Override
-    public List<Libro> buscarLibro(String filtro) {
-        return null;
-    }
-
-    @Override
-    public List<Libro> buscarByAny(String filtro) {
-        return null;
+    public ResponseEntity<Libro> buscarByAny(Integer id) {
+        Optional<Libro> libroOptional = libroRepository.findById(id);
+        if (!libroOptional.isPresent()) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
+        return ResponseEntity.ok(libroOptional.get());
     }
 }

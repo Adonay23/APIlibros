@@ -1,9 +1,8 @@
-package com.ues.bibliotecalibro.entity;
+package com.ues.bibliotecalibro.responseDto;
 
 public class GenericResponse <T>{
     private Integer code;
     private String message;
-    private T response;
 
     public Integer getCode() {
         return code;
@@ -21,11 +20,4 @@ public class GenericResponse <T>{
         this.message = message;
     }
 
-    public T getResponse() {
-        return response;
-    }
-
-    public void setResponse(T response) {
-        this.response = response;
-    }
 }

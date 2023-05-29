@@ -2,6 +2,8 @@ package com.ues.bibliotecalibro.controllers;
 
 import com.ues.bibliotecalibro.entity.Biblioteca;
 import com.ues.bibliotecalibro.repository.BibliotecaRepository;
+import com.ues.bibliotecalibro.responseDto.BibliotecaResponseDto;
+import com.ues.bibliotecalibro.services.BibliotecaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -20,11 +23,20 @@ public class BibliotecaController {
     @Autowired
     private BibliotecaRepository bibliotecaRepository;
 
+    @Autowired
+    private BibliotecaService bibliotecaService;
+
 
 
     @GetMapping
     public ResponseEntity<Page<Biblioteca>> listarBibliotecas(Pageable pageable) {
         return ResponseEntity.ok(bibliotecaRepository.findAll(pageable));
+    }
+
+    @CrossOrigin
+    @GetMapping("/listar")
+    public ResponseEntity<List<BibliotecaResponseDto>> listarBibliotecas() {
+        return bibliotecaService.ListaBibliotecas();
     }
 
     @PostMapping
