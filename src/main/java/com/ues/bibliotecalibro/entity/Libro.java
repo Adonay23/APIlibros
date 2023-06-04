@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 
 @Entity
 @Table(name="libro", uniqueConstraints = {@UniqueConstraint(columnNames = {"nombrelibro"})})
-public class Libro {
+public class  Libro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

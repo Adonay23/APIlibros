@@ -9,9 +9,11 @@ import com.ues.bibliotecalibro.repository.LibroRepository;
 
 import com.ues.bibliotecalibro.responseDto.LibrosResponseDto;
 import com.ues.bibliotecalibro.services.ILibroService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,15 +35,16 @@ public class LibroController {
     @Autowired
     private BibliotecaRepository bibliotecaRepository;
 
-    @ApiOperation(value = "Obtener todas los Libros", notes = "No necesita parametros de entrada",
-            responseContainer = "Libro")
-    @ApiResponse(code = 200, message = "ApiResponseMessages.ITEM_FETCHED",
-            response = Libro.class, responseContainer = "List")
+ @Operation(summary = "Obtener todas los Libros", description = "Obtiene una lista de todos los libros",
+            tags = {"Libros"})
+    @ApiResponse(responseCode = "200", description = "ApiResponseMessages.ITEM_FETCHED",
+            content ={@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Libro.class))})
     @ApiResponses(value = {
-            @ApiResponse(code = 400, message = "Bad request o datos no enviados correctamente"),
-            @ApiResponse(code = 404, message = "Not found, no encontrado"),
-            @ApiResponse(code = 405, message = "No se encotraron libros en la base de datos"),
-            @ApiResponse(code = 200, message = "Peticion OK")})
+            @ApiResponse(responseCode = "400", description = "Bad request o datos no enviados correctamente"),
+            @ApiResponse(responseCode ="404", description = "Not found, no encontrado"),
+            @ApiResponse(responseCode = "405", description = "No se encotraron libros en la base de datos"),
+            @ApiResponse(responseCode = "200", description = "Peticion OK")})
 
 
     @GetMapping
