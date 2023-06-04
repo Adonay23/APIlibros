@@ -7,6 +7,7 @@ import com.ues.bibliotecalibro.entity.Libro;
 import com.ues.bibliotecalibro.repository.BibliotecaRepository;
 import com.ues.bibliotecalibro.repository.LibroRepository;
 
+import com.ues.bibliotecalibro.responseDto.LibroRequestDto;
 import com.ues.bibliotecalibro.responseDto.LibrosResponseDto;
 import com.ues.bibliotecalibro.services.ILibroService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,12 +59,12 @@ public class LibroController {
     }
 
     @PostMapping
-    public ResponseEntity<GenericResponse> guardarLibro(@Valid @RequestBody Libro libro) {
+    public ResponseEntity<GenericResponse> guardarLibro(@Valid @RequestBody LibroRequestDto libro) {
         return serviceLibro.registrar(libro);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GenericResponse> actualizarLibro(@Valid @RequestBody Libro libro, @PathVariable Integer id) {
+    public ResponseEntity<GenericResponse> actualizarLibro(@Valid @RequestBody LibroRequestDto libro, @PathVariable Integer id) {
         return serviceLibro.modificar(libro, id);
     }
 

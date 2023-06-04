@@ -5,6 +5,7 @@ import com.ues.bibliotecalibro.entity.Libro;
 import com.ues.bibliotecalibro.repository.BibliotecaRepository;
 import com.ues.bibliotecalibro.responseDto.BibliotecaResponseDto;
 import com.ues.bibliotecalibro.responseDto.GenericResponse;
+import com.ues.bibliotecalibro.responseDto.LibroRequestDto;
 import com.ues.bibliotecalibro.services.BibliotecaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,12 +34,12 @@ public class BibliotecaServiceImpl implements BibliotecaService {
     }
 
     @Override
-    public ResponseEntity<GenericResponse> registrar(Biblioteca obj) {
+    public ResponseEntity<GenericResponse> registrar(LibroRequestDto obj) {
         return null;
     }
 
     @Override
-    public ResponseEntity<GenericResponse> modificar(Biblioteca obj, Integer id) {
+    public ResponseEntity<GenericResponse> modificar(LibroRequestDto obj, Integer id) {
         return null;
     }
 

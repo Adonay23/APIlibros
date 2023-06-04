@@ -17,7 +17,6 @@ public class  Libro {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "biblioteca_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Biblioteca bibliotequita;
 
     public int getId() {

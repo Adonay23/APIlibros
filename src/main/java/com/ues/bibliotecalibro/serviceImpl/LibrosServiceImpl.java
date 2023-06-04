@@ -5,6 +5,7 @@ import com.ues.bibliotecalibro.responseDto.GenericResponse;
 import com.ues.bibliotecalibro.entity.Libro;
 import com.ues.bibliotecalibro.repository.BibliotecaRepository;
 import com.ues.bibliotecalibro.repository.LibroRepository;
+import com.ues.bibliotecalibro.responseDto.LibroRequestDto;
 import com.ues.bibliotecalibro.responseDto.LibrosResponseDto;
 import com.ues.bibliotecalibro.services.ILibroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,19 @@ public class LibrosServiceImpl implements ILibroService {
     private BibliotecaRepository bibliotecaRepository;
 
     @Override
-    public ResponseEntity<GenericResponse> registrar(Libro libro) {
+    public ResponseEntity<GenericResponse> registrar(LibroRequestDto request) {
         GenericResponse<Libro> rs = new GenericResponse<Libro>();
-        try {
-            Optional<Biblioteca> bibliotecaOptional = bibliotecaRepository.findById(libro.getBibliotequita().getId());
 
-            libro.setBibliotequita(bibliotecaOptional.get());
-            libroRepository.save(libro);
+        try {
+            Optional<Biblioteca> bibliotecaOptional = bibliotecaRepository.findById(request.getIdbiblioteca());
+            Libro librito=new Libro();
+
+            librito.setId(request.getId());
+            librito.setNombre(request.getNombre());
+            librito.setBibliotequita(bibliotecaOptional.get());
+
+
+            libroRepository.save(librito);
             rs.setCode(1);
             rs.setMessage("Exito -Libro Agregado");
             return new ResponseEntity<GenericResponse>(rs, HttpStatus.CREATED);
@@ -44,14 +51,18 @@ public class LibrosServiceImpl implements ILibroService {
     }
 
     @Override
-    public ResponseEntity<GenericResponse> modificar(Libro libro, Integer id) {
+    public ResponseEntity<GenericResponse> modificar(LibroRequestDto request, Integer id) {
         GenericResponse<Libro> rs = new GenericResponse<Libro>();
         try {
-            Optional<Biblioteca> bibliotecaOptional = bibliotecaRepository.findById(libro.getBibliotequita().getId());
+            Optional<Biblioteca> bibliotecaOptional = bibliotecaRepository.findById(request.getIdbiblioteca());
             Optional<Libro> libroOptional = libroRepository.findById(id);
-            libro.setBibliotequita(bibliotecaOptional.get());
-            libro.setId(libroOptional.get().getId());
-            libroRepository.save(libro);
+            Libro librito=new Libro();
+
+            librito.setId(libroOptional.get().getId());
+            librito.setNombre(request.getNombre());
+            librito.setBibliotequita(bibliotecaOptional.get());
+
+            libroRepository.save(librito);
             rs.setCode(1);
             rs.setMessage("Exito -Libro Actualizado");
             return new ResponseEntity<GenericResponse>(rs, HttpStatus.OK);
