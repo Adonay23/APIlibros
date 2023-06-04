@@ -14,6 +14,9 @@ public interface LibroRepository<E> extends JpaRepository<Libro, Integer> {
     @Query(value = "SELECT NEW com.ues.bibliotecalibro.responseDto.LibrosResponseDto ( b.id,b.nombre,a.nombre) FROM Biblioteca a JOIN a.libros b")
     Page<LibrosResponseDto> findAllBook(Pageable pageable);
 
+    @Query(value="select * from libro where nombrelibro like %:nombre%" ,nativeQuery = true)
+    Page<Libro> findByName(String nombre, Pageable pageable);
+
 
 }
 

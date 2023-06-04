@@ -78,11 +78,18 @@ public class LibrosServiceImpl implements ILibroService {
         return ResponseEntity.ok(libroRepository.findAll(pageable));
     }
 
-
     @Override
-    public Libro leerPorId(Integer id) {
-        return null;
+    public ResponseEntity<Page<LibrosResponseDto>>  buscarByNombre(String name, Pageable pageable) {
+        Page<LibrosResponseDto> librosMostrar = null;
+        try {
+            librosMostrar = libroRepository.findByName(name,pageable);
+
+        } catch (Exception e) {
+            System.out.println("ERROR:" + e.getMessage());
+        }
+        return ResponseEntity.ok(librosMostrar);
     }
+
 
     @Override
     public ResponseEntity<GenericResponse> eliminar(Integer id) {

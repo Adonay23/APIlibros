@@ -20,7 +20,7 @@ public interface ILibroService {
     ResponseEntity<GenericResponse> registrar(LibroRequestDto obj);
     ResponseEntity<GenericResponse> modificar (LibroRequestDto obj,Integer id);
     ResponseEntity<Page<Libro>> listar(Pageable pageable);
-    Libro leerPorId(Integer id);
+    ResponseEntity<Page<LibrosResponseDto>> buscarByNombre(String name,Pageable pageable);
     ResponseEntity<GenericResponse>  eliminar(Integer id);
 
 }

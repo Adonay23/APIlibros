@@ -58,6 +58,12 @@ public class LibroController {
         return serviceLibro.ListaLibros(pageable);
     }
 
+    @GetMapping("/buscar")
+    public ResponseEntity<Page<LibrosResponseDto>> buscarByName(String name,Pageable pageable) {
+        return serviceLibro.buscarByNombre(name,pageable);
+    }
+
+
     @PostMapping
     public ResponseEntity<GenericResponse> guardarLibro(@Valid @RequestBody LibroRequestDto libro) {
         return serviceLibro.registrar(libro);
